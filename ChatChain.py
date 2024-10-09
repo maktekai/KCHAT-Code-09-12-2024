@@ -140,13 +140,14 @@ def Get_Conversation_chain(knowledgeBases,temperature,model,question,chat_histor
     rag_chain = create_retrieval_chain(history_aware_retriever | format_docs, question_answer_chain)
     response=rag_chain.invoke({"input": question, "chat_history": serialize_history(chat_history)})
     answer = response['answer']
+#    print(response)
 #    print("_-----------------------------------",len(response['context']))
  #   print(response['context'])
     refrence_docuemnts_sources=format_references(response['context'])
     result= chain.run(answer)
     #print(result)
     chroma_db._client._system.stop()
-    SharedSystemClient._identifer_to_system.pop(chroma_db._client._identifier, None)
+    SharedSystemClient._identifier_to_system.pop(chroma_db._client._identifier, None)
     chroma_db = None
 
     refrence_docuemnts_sources=format_references(response['context'])

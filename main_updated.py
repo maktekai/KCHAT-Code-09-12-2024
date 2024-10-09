@@ -1292,8 +1292,9 @@ async def chat(request: ChatRequest):
                 raise HTTPException(status_code=404,
                                     detail=f'Chatbot Do not have any Knowledge Store attached to it Please Contact Administrator to Attach Context.')
             try:
+                print("/Chat: ", request.chatbotId)
                 answer,sources=Get_Conversation_chain(db_entry.knowledgeBases,db_entry.temperature,db_entry.llm,request.question,request.chat_history)
-#                print(answer,sources)
+                print(answer,sources)
                 currentTokens=num_tokens_from_string(str(request.question) + str(answer) + str(sources))
                 verification = VerifyChatbotResponceCreditQouta(db, db_entry.user_id, 1)
                 if not verification[1]:
@@ -1315,6 +1316,7 @@ async def chat(request: ChatRequest):
             db.close()
             return ChatResponse(answer="Chatbot Configuration not Found under ID: " + str(request.chatbotId) , reference_context=[])
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 def num_tokens_from_string(string: str, encoding_name="text-embedding-ada-002") -> int:
     encoding = tiktoken.encoding_for_model(encoding_name)

@@ -2,4 +2,5 @@
 dev-env
 Optimal-Access-Vector-Store
 Database.db
-
+venv
+__pycache__
